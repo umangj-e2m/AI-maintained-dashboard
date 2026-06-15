@@ -1,18 +1,21 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import {
-  ArrowLeft, Sparkles, AlertCircle, CheckCircle2, XCircle, Link2, 
+  Sparkles, AlertCircle, CheckCircle2, XCircle, Link2, 
   MousePointer, Image as ImageIcon, Eye, Calendar, Mail, FileText, 
-  MapPin, TrendingUp, Star, Activity
+  MapPin, TrendingUp, Star, Activity, ChevronDown
 } from 'lucide-react';
 import { CLIENT_AUDITS } from '../../data/clientAudits';
+import { ALL_CLIENTS } from '../../data/clients';
 
 interface ClientDashboardProps {
   clientName: string;
-  onBack: () => void;
+  onClientChange: (name: string) => void;
 }
 
-export default function ClientDashboard({ clientName, onBack }: ClientDashboardProps) {
+export default function ClientDashboard({ clientName, onClientChange }: ClientDashboardProps) {
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+  const [filterText, setFilterText] = React.useState('');
   const auditData = CLIENT_AUDITS[clientName] || CLIENT_AUDITS["Pure Air Solutions"];
 
   // Helper for overall health status styling
@@ -286,21 +289,77 @@ export default function ClientDashboard({ clientName, onBack }: ClientDashboardP
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/60">
         <div className="flex items-center gap-4">
-          <button
-            onClick={onBack}
-            className="p-3 rounded-xl border border-[#e6dec9] bg-white hover:bg-slate-50 text-[#142f45] transition-all cursor-pointer flex items-center justify-center shadow-sm hover:-translate-x-1"
-          >
-            <ArrowLeft size={20} />
-          </button>
           <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold text-[#142f45] tracking-tight">{auditData.clientName}</h1>
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold border flex items-center gap-1.5 ${healthColors.bg} ${healthColors.text} ${healthColors.border}`}>
-                <span className={`w-2 h-2 rounded-full ${healthColors.dot}`} />
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-slate-50 text-[#142f45] rounded-lg border border-[#e6dec9] transition-all cursor-pointer shadow-sm hover:scale-[1.01] text-left select-none"
+                >
+                  <span className="text-sm font-bold text-[#142f45]">{auditData.clientName}</span>
+                  <ChevronDown size={14} className={`text-slate-500 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {dropdownOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
+                    <div className="absolute left-0 mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-xl py-2 z-50 max-h-96 overflow-y-auto hidden-scrollbar">
+                      <div className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                        Switch Client
+                      </div>
+                      
+                      <div className="px-3 py-2 border-b border-slate-100">
+                        <input
+                          type="text"
+                          placeholder="Search clients..."
+                          value={filterText}
+                          onChange={(e) => setFilterText(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#142f45]/20 focus:border-[#142f45] placeholder:text-slate-400 text-slate-700"
+                        />
+                      </div>
+
+                      <div className="py-1 animate-fadeIn">
+                        {ALL_CLIENTS.filter(c => c.name.toLowerCase().includes(filterText.toLowerCase())).map((client) => {
+                          const isSelected = client.name === auditData.clientName;
+                          const dotColor = client.status === 'green' ? 'bg-emerald-500' : client.status === 'yellow' ? 'bg-amber-500' : 'bg-rose-500';
+                          return (
+                            <button
+                              key={client.id}
+                              onClick={() => {
+                                onClientChange(client.name);
+                                setDropdownOpen(false);
+                                setFilterText('');
+                              }}
+                              className={`w-full flex items-center justify-between px-4 py-2 hover:bg-slate-50 transition-colors text-left border-0 cursor-pointer ${
+                                isSelected ? 'bg-[#142f45]/[0.04]' : 'bg-transparent'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />
+                                <span className={`text-xs font-bold ${isSelected ? 'text-[#142f45]' : 'text-slate-700'}`}>
+                                  {client.name}
+                                </span>
+                              </div>
+                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                                client.healthScore >= 80 ? 'bg-emerald-50 text-emerald-600' : client.healthScore >= 60 ? 'bg-amber-50 text-amber-600' : 'bg-rose-50 text-rose-600'
+                              }`}>
+                                {client.healthScore}%
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border flex items-center gap-1.5 ${healthColors.bg} ${healthColors.text} ${healthColors.border}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${healthColors.dot}`} />
                 {auditData.overallHealthScore}/100 Health
               </span>
             </div>
-            <p className="text-sm text-slate-500 mt-1.5">AI-Maintained Consolidated Performance Dashboard</p>
           </div>
         </div>
 

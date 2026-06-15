@@ -6,11 +6,12 @@ type NavItem = 'dashboard' | 'clients';
 interface AppShellProps {
   activeNav: NavItem;
   title: string;
+  subtitle?: string;
   titleIcon?: React.ReactNode;
   children: React.ReactNode;
 }
 
-export function AppShell({ activeNav, title, titleIcon, children }: AppShellProps) {
+export function AppShell({ activeNav, title, subtitle, titleIcon, children }: AppShellProps) {
   const handleSignOut = () => {
     localStorage.setItem('isLoggedIn', 'false');
     window.location.href = '/';
@@ -33,10 +34,17 @@ export function AppShell({ activeNav, title, titleIcon, children }: AppShellProp
             </button>
           </div>
 
-          <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-xl text-[#142f45] hidden md:flex items-center gap-2 pointer-events-none">
-            {titleIcon}
-            {title}
-          </h1>
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none text-center">
+            <h1 className="font-bold text-xl text-[#142f45] flex items-center gap-2">
+              {titleIcon}
+              {title}
+            </h1>
+            {subtitle && (
+              <span className="text-sm font-normal text-slate-500 mt-1 block">
+                {subtitle}
+              </span>
+            )}
+          </div>
 
           <div className="flex items-center gap-6">
             <button className="relative p-2 text-slate-500 hover:text-slate-900 transition-colors bg-transparent border-0 cursor-pointer">
