@@ -68,19 +68,8 @@ export interface ClientAudit {
   overallHealthLabel: 'Green' | 'Yellow' | 'Red';
   aiRecommendations: string[];
   pages: PageAudit[];
-  newsletterHistory: {
-    date: string;
-    subject: string;
-    sentCount: number;
-    openRatePct: number;
-    clickRatePct: number;
-  }[];
-  gbpPostHistory: {
-    date: string;
-    content: string;
-    views: number;
-    clicks: number;
-  }[];
+  newsletterHistory: NewsletterCampaign[];
+  gbpPostHistory: GbpPost[];
   
   // GA4 Metrics
   ga4: {
@@ -127,6 +116,276 @@ export interface ClientAudit {
     viewsTrend: GbpViewsItem[];
     reviews: GbpReview[];
   };
+}
+
+export interface NewsletterCampaign {
+  date: string;
+  subject: string;
+  sentCount: number;
+  openRatePct: number;
+  clickRatePct: number;
+  segment: string;
+  campaignType: 'Seasonal Offer' | 'Educational' | 'Newsletter' | 'Re-engagement';
+  primaryCta: string;
+  conversions: number;
+  revenueGenerated: number;
+  unsubscribeRatePct: number;
+}
+
+export interface GbpPost {
+  date: string;
+  content: string;
+  views: number;
+  clicks: number;
+  postType: 'Offer' | 'WhatsNew' | 'Event';
+  ctaType: 'Call Now' | 'Learn More' | 'Book' | 'Get Offer';
+  mediaDescription: string;
+  offerDetails: string;
+  status: 'Active' | 'Expired';
+}
+
+function getNewsletterHistory(name: string, category: 'HVAC' | 'Plumbing' | 'Home Services', multiplier: number): NewsletterCampaign[] {
+  const sentCount = Math.round(800 + multiplier * 1200);
+  if (category === 'HVAC') {
+    return [
+      { 
+        date: "2026-06-10", 
+        subject: `Beat the Summer Heat: 5 Essential AC Maintenance Tips for ${name} ☀️`, 
+        sentCount, 
+        openRatePct: Math.round(35 + multiplier * 10), 
+        clickRatePct: Math.round(4 + multiplier * 3),
+        segment: "Active AC Leads & Past Cooling System Customers",
+        campaignType: "Educational",
+        primaryCta: "Schedule $79 AC Tune-up",
+        conversions: Math.round(8 + multiplier * 15),
+        revenueGenerated: Math.round(600 + multiplier * 2500),
+        unsubscribeRatePct: 0.2
+      },
+      { 
+        date: "2026-05-15", 
+        subject: "Breathe Easy: How to Improve Your Home's Indoor Air Quality Today 🍃", 
+        sentCount: sentCount - 50, 
+        openRatePct: Math.round(30 + multiplier * 12), 
+        clickRatePct: Math.round(3 + multiplier * 4),
+        segment: "All Residential Maintenance Plan Subscribers",
+        campaignType: "Newsletter",
+        primaryCta: "Request IAQ Consultation",
+        conversions: Math.round(5 + multiplier * 10),
+        revenueGenerated: Math.round(400 + multiplier * 1800),
+        unsubscribeRatePct: 0.3
+      },
+      { 
+        date: "2026-04-12", 
+        subject: "Is Your HVAC Unit Ready for Spring? Schedule a Tune-Up 🌸", 
+        sentCount: sentCount - 120, 
+        openRatePct: Math.round(32 + multiplier * 11), 
+        clickRatePct: Math.round(3.5 + multiplier * 3.5),
+        segment: "Inactive Customer Database Re-engagement",
+        campaignType: "Seasonal Offer",
+        primaryCta: "Book Spring Maintenance",
+        conversions: Math.round(10 + multiplier * 18),
+        revenueGenerated: Math.round(800 + multiplier * 3000),
+        unsubscribeRatePct: 0.1
+      }
+    ];
+  } else if (category === 'Plumbing') {
+    return [
+      { 
+        date: "2026-06-10", 
+        subject: `5 Things You Should Never Put Down Your Garbage Disposal 🚫 - ${name}`, 
+        sentCount, 
+        openRatePct: Math.round(35 + multiplier * 10), 
+        clickRatePct: Math.round(4 + multiplier * 3),
+        segment: "Homeowners with Active Disposals",
+        campaignType: "Educational",
+        primaryCta: "Read Disposal Safety Guide",
+        conversions: Math.round(4 + multiplier * 8),
+        revenueGenerated: Math.round(300 + multiplier * 1200),
+        unsubscribeRatePct: 0.25
+      },
+      { 
+        date: "2026-05-15", 
+        subject: "Water Heater Longevity: How to Flush It for a Long Life 💧", 
+        sentCount: sentCount - 50, 
+        openRatePct: Math.round(30 + multiplier * 12), 
+        clickRatePct: Math.round(3 + multiplier * 4),
+        segment: "Water Heater Installation Customers (2-5 Years Old)",
+        campaignType: "Newsletter",
+        primaryCta: "Book Water Heater Flush",
+        conversions: Math.round(7 + multiplier * 12),
+        revenueGenerated: Math.round(550 + multiplier * 2000),
+        unsubscribeRatePct: 0.2
+      },
+      { 
+        date: "2026-04-12", 
+        subject: "How to Detect and Fix Hidden Water Leaks in Your Home 💸", 
+        sentCount: sentCount - 120, 
+        openRatePct: Math.round(32 + multiplier * 11), 
+        clickRatePct: Math.round(3.5 + multiplier * 3.5),
+        segment: "High Water Bill Spike Leads & Inquiries",
+        campaignType: "Seasonal Offer",
+        primaryCta: "Schedule Leak Inspection",
+        conversions: Math.round(9 + multiplier * 14),
+        revenueGenerated: Math.round(700 + multiplier * 2400),
+        unsubscribeRatePct: 0.15
+      }
+    ];
+  } else {
+    return [
+      { 
+        date: "2026-06-10", 
+        subject: `Is Your Electrical Panel Safe? 5 Critical Signs from ${name} ⚡`, 
+        sentCount, 
+        openRatePct: Math.round(35 + multiplier * 10), 
+        clickRatePct: Math.round(4 + multiplier * 3),
+        segment: "Older Homes Neighborhood Target List",
+        campaignType: "Educational",
+        primaryCta: "Book Panel Safety Audit",
+        conversions: Math.round(6 + multiplier * 11),
+        revenueGenerated: Math.round(900 + multiplier * 4000),
+        unsubscribeRatePct: 0.3
+      },
+      { 
+        date: "2026-05-15", 
+        subject: "Smart Home Tech: Upgrades That Can Lower Your Utility Bills 💡", 
+        sentCount: sentCount - 50, 
+        openRatePct: Math.round(30 + multiplier * 12), 
+        clickRatePct: Math.round(3 + multiplier * 4),
+        segment: "High Energy Consumption Customers",
+        campaignType: "Newsletter",
+        primaryCta: "Explore Smart Upgrades",
+        conversions: Math.round(5 + multiplier * 9),
+        revenueGenerated: Math.round(750 + multiplier * 3200),
+        unsubscribeRatePct: 0.22
+      },
+      { 
+        date: "2026-04-12", 
+        subject: "The Ultimate Home Maintenance Checklist: Spring Edition 🏡", 
+        sentCount: sentCount - 120, 
+        openRatePct: Math.round(32 + multiplier * 11), 
+        clickRatePct: Math.round(3.5 + multiplier * 3.5),
+        segment: "All Registered Residential Customers",
+        campaignType: "Seasonal Offer",
+        primaryCta: "Schedule Spring Service Checklist",
+        conversions: Math.round(8 + multiplier * 16),
+        revenueGenerated: Math.round(650 + multiplier * 2800),
+        unsubscribeRatePct: 0.12
+      }
+    ];
+  }
+}
+
+function getGbpPostHistory(category: 'HVAC' | 'Plumbing' | 'Home Services', multiplier: number): GbpPost[] {
+  const baseViews = Math.round(40 + multiplier * 80);
+  if (category === 'HVAC') {
+    return [
+      { 
+        date: "2026-06-12", 
+        content: "AC blowing warm air? 😰 Don't sweat it! Our certified HVAC technicians are standing by for 24/7 emergency repairs. Get $25 off your service call today!", 
+        views: baseViews, 
+        clicks: Math.round(baseViews * 0.1),
+        postType: "Offer",
+        ctaType: "Get Offer",
+        mediaDescription: "Certified technician in uniform inspecting a residential outdoor AC condenser unit",
+        offerDetails: "$25 Off Emergency Service Call",
+        status: "Active"
+      },
+      { 
+        date: "2026-06-01", 
+        content: "Keep your system running efficiently and lower your energy bills. Book our $79 seasonal AC tune-up today! 📞 Call us now to schedule.", 
+        views: baseViews - 10, 
+        clicks: Math.round((baseViews - 10) * 0.08),
+        postType: "Offer",
+        ctaType: "Book",
+        mediaDescription: "Close-up of manifold gauges connected to air conditioner service valves",
+        offerDetails: "$79 Seasonal AC Tune-up Promo",
+        status: "Active"
+      },
+      { 
+        date: "2026-05-18", 
+        content: "Clean filters = clean air! A simple filter change can improve your HVAC efficiency by 15%. Replace yours every 90 days. 🛠️", 
+        views: baseViews + 15, 
+        clicks: Math.round((baseViews + 15) * 0.09),
+        postType: "WhatsNew",
+        ctaType: "Learn More",
+        mediaDescription: "Friendly HVAC technician sliding a brand new pleated air filter into a return slot",
+        offerDetails: "",
+        status: "Expired"
+      }
+    ];
+  } else if (category === 'Plumbing') {
+    return [
+      { 
+        date: "2026-06-12", 
+        content: "Clogged drains driving you crazy? 🪠 Get them flowing freely with our professional drain cleaning special for only $99! Call us today to book.", 
+        views: baseViews, 
+        clicks: Math.round(baseViews * 0.1),
+        postType: "Offer",
+        ctaType: "Get Offer",
+        mediaDescription: "Plumbing specialist using a professional drum drain snake auger on a sink pipe drain line",
+        offerDetails: "$99 Professional Drain Cleaning",
+        status: "Active"
+      },
+      { 
+        date: "2026-06-01", 
+        content: "Hidden leaks can cost you hundreds on your water bill! 💸 Our expert plumbers use advanced leak detection technology. Schedule an inspection today!", 
+        views: baseViews - 10, 
+        clicks: Math.round((baseViews - 10) * 0.08),
+        postType: "WhatsNew",
+        ctaType: "Book",
+        mediaDescription: "Technician using ultrasonic acoustic equipment to detect hidden leaks behind drywall",
+        offerDetails: "",
+        status: "Active"
+      },
+      { 
+        date: "2026-05-18", 
+        content: "Running out of hot water too fast? It might be time for a water heater checkup. Let us help you keep the hot water flowing! 🛁 Call today.", 
+        views: baseViews + 15, 
+        clicks: Math.round((baseViews + 15) * 0.09),
+        postType: "WhatsNew",
+        ctaType: "Call Now",
+        mediaDescription: "Standard 50-gallon gas hot water heater showing the control valve dial and copper piping",
+        offerDetails: "",
+        status: "Expired"
+      }
+    ];
+  } else {
+    return [
+      { 
+        date: "2026-06-12", 
+        content: "Flickering lights or tripping breakers? ⚡ Your electrical panel might be overloaded. Contact us for a free panel upgrade estimate today!", 
+        views: baseViews, 
+        clicks: Math.round(baseViews * 0.1),
+        postType: "WhatsNew",
+        ctaType: "Learn More",
+        mediaDescription: "Close-up of a neat electrical service panel upgrade showing circuit breakers and wiring labels",
+        offerDetails: "",
+        status: "Active"
+      },
+      { 
+        date: "2026-06-01", 
+        content: "Upgrade your home security and convenience with smart outdoor lighting! 💡 Our licensed electricians can design the perfect setup. Call today.", 
+        views: baseViews - 10, 
+        clicks: Math.round((baseViews - 10) * 0.08),
+        postType: "Offer",
+        ctaType: "Book",
+        mediaDescription: "Exterior residential modern smart LED floodlight fixture installed under roof soffit",
+        offerDetails: "10% Off Smart Lighting Installation",
+        status: "Active"
+      },
+      { 
+        date: "2026-05-18", 
+        content: "Still using old two-prong outlets? Upgrade to GFCI outlets to protect your family from shocks. Contact us for professional installation! 🛠️", 
+        views: baseViews + 15, 
+        clicks: Math.round((baseViews + 15) * 0.09),
+        postType: "WhatsNew",
+        ctaType: "Call Now",
+        mediaDescription: "Electrician replacing a wall socket receptacle with a new tamper-resistant GFCI safety outlet",
+        offerDetails: "",
+        status: "Expired"
+      }
+    ];
+  }
 }
 
 // Helper to generate realistic data based on a client's health score
@@ -178,12 +437,8 @@ function generateAudit(name: string, category: 'HVAC' | 'Plumbing' | 'Home Servi
       `Verify all CTA click triggers are properly tracking in tag manager.`
     ],
     pages,
-    newsletterHistory: [
-      { date: "2026-06-10", subject: `Local Home Maintenance tips by ${name}`, sentCount: 1000, openRatePct: Math.round(20 + multiplier * 25), clickRatePct: Math.round(2 + multiplier * 6) }
-    ],
-    gbpPostHistory: [
-      { date: "2026-06-12", content: `Call us for reliable local ${category.toLowerCase()} services!`, views: 50, clicks: 5 }
-    ],
+    newsletterHistory: getNewsletterHistory(name, category, multiplier),
+    gbpPostHistory: getGbpPostHistory(category, multiplier),
     ga4: {
       totalEvents,
       eventsPerSession: parseFloat((5.0 + multiplier * 3.2).toFixed(2)),
@@ -319,12 +574,80 @@ export const CLIENT_AUDITS: Record<string, ClientAudit> = {
       }
     ],
     newsletterHistory: [
-      { date: "2026-06-10", subject: "Beat the Houston Heat: Summer Prep Special ☀️", sentCount: 1250, openRatePct: 41.5, clickRatePct: 6.8 },
-      { date: "2026-05-15", subject: "Is your home's air clean? 3 indoor air quality tips", sentCount: 1200, openRatePct: 39.2, clickRatePct: 5.1 }
+      { 
+        date: "2026-06-10", 
+        subject: "Beat the Summer Heat: Pure Air's Summer Prep Special ☀️", 
+        sentCount: 1250, 
+        openRatePct: 41.5, 
+        clickRatePct: 6.8,
+        segment: "Houston Metro Registered Customer Database",
+        campaignType: "Seasonal Offer",
+        primaryCta: "Claim $25 Off Summer AC Prep",
+        conversions: 16,
+        revenueGenerated: 3450,
+        unsubscribeRatePct: 0.18
+      },
+      { 
+        date: "2026-05-15", 
+        subject: "Breathe Easy: 3 Tips for Better Indoor Air Quality 🍃", 
+        sentCount: 1200, 
+        openRatePct: 39.2, 
+        clickRatePct: 5.1,
+        segment: "All Active Maintenance Contract Holders",
+        campaignType: "Educational",
+        primaryCta: "Read Air Quality Maintenance Guide",
+        conversions: 8,
+        revenueGenerated: 1200,
+        unsubscribeRatePct: 0.22
+      },
+      { 
+        date: "2026-04-10", 
+        subject: "Schedule Your Spring HVAC Tune-Up Before Summer Rates Rise! 🌸", 
+        sentCount: 1150, 
+        openRatePct: 37.8, 
+        clickRatePct: 4.8,
+        segment: "Houston Residential Leads & Single Family Homes",
+        campaignType: "Re-engagement",
+        primaryCta: "Book Spring Maintenance Now",
+        conversions: 22,
+        revenueGenerated: 4900,
+        unsubscribeRatePct: 0.15
+      }
     ],
     gbpPostHistory: [
-      { date: "2026-06-14", content: "Stay cool with our premium AC check-ups! Get $25 off a complete cooling system audit this week. 📞 Call today to book same-day service.", views: 88, clicks: 12 },
-      { date: "2026-05-30", content: "We are proud of our team of certified AC repair technicians. Serving the greater Houston area with honesty and pride since 2012.", views: 64, clicks: 4 }
+      { 
+        date: "2026-06-14", 
+        content: "Stay cool with our premium AC check-ups! Get $25 off a complete cooling system audit this week. 📞 Call today to book same-day service.", 
+        views: 88, 
+        clicks: 12,
+        postType: "Offer",
+        ctaType: "Get Offer",
+        mediaDescription: "Certified AC service technician holding pressure gauges next to outdoor compressor",
+        offerDetails: "$25 Off System Cooling Audit",
+        status: "Active"
+      },
+      { 
+        date: "2026-05-30", 
+        content: "We are proud of our team of certified AC repair technicians. Serving the greater Houston area with honesty and pride since 2012.", 
+        views: 64, 
+        clicks: 4,
+        postType: "WhatsNew",
+        ctaType: "Learn More",
+        mediaDescription: "Three smiling technicians standing in front of two marked service vans",
+        offerDetails: "",
+        status: "Active"
+      },
+      { 
+        date: "2026-05-12", 
+        content: "Breathe easier with our premium IAQ (Indoor Air Quality) installations! Ask about our HEPA filter upgrades today. 🍃", 
+        views: 72, 
+        clicks: 8,
+        postType: "WhatsNew",
+        ctaType: "Call Now",
+        mediaDescription: "Side view of an air handler cabinet showing clean media filters loaded",
+        offerDetails: "",
+        status: "Expired"
+      }
     ],
 
     // Mapped precisely to GA4 Screenshot 1
