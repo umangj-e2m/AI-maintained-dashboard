@@ -18,14 +18,12 @@ export function AppShell({ activeNav, title, titleIcon, children }: AppShellProp
 
   return (
     <div className="h-screen bg-[#eef1f6] font-sans text-slate-900 flex flex-col overflow-hidden">
-      <header className="fixed top-0 left-0 right-0 h-24 md:h-28 bg-white/80 backdrop-blur-md border-b border-[#e6dec9] flex items-center z-30 flex-shrink-0">
-        <div className="w-64 h-full border-r border-[#e6dec9] flex items-center justify-center flex-shrink-0">
-          <a href="/" className="flex items-center justify-center h-full w-full px-4">
-            <img src="/logo.svg" alt="Explore Media" className="h-20 md:h-24 opacity-90 object-contain max-w-full" />
-          </a>
-        </div>
+      <header className="fixed top-0 left-0 right-0 h-24 md:h-28 bg-white/80 backdrop-blur-md border-b border-[#e6dec9] flex items-center z-30 flex-shrink-0 px-8">
+        <a href="/" className="flex items-center justify-center h-full mr-8">
+          <img src="/logo.svg" alt="Explore Media" className="h-20 md:h-24 opacity-90 object-contain" />
+        </a>
 
-        <div className="flex-1 flex items-center justify-between px-8 h-full relative">
+        <div className="flex-1 flex items-center justify-between h-full relative">
           <div className="flex items-center gap-6">
             <button
               onClick={() => { window.location.href = '/'; }}
@@ -59,29 +57,7 @@ export function AppShell({ activeNav, title, titleIcon, children }: AppShellProp
         </div>
       </header>
 
-      <div className="flex flex-1 pt-24 md:pt-28 overflow-hidden">
-        <aside className="w-64 bg-white border-r border-[#e6dec9] flex flex-col shrink-0 h-full relative z-20">
-          <div className="py-6 flex-1 overflow-y-auto hidden-scrollbar">
-            <div className="text-[11px] uppercase text-[#94a3b8] font-bold tracking-[0.05em] px-4 mb-2">
-              Navigation
-            </div>
-            <nav className="flex flex-col gap-1 px-4">
-              <NavButton
-                href="/main-dashboard.html"
-                icon={<LayoutDashboard size={18} />}
-                label="Main Dashboard"
-                isActive={activeNav === 'dashboard'}
-              />
-              <NavButton
-                href="/clients.html"
-                icon={<Users size={18} />}
-                label="Clients"
-                isActive={activeNav === 'clients'}
-              />
-            </nav>
-          </div>
-        </aside>
-
+      <div className="flex flex-1 pt-24 md:pt-28 overflow-hidden w-full">
         <main className="flex-1 overflow-y-auto relative w-full bg-[#eef1f6]">
           {children}
         </main>

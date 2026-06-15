@@ -83,7 +83,7 @@ export default function Landing() {
   const handleModalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('isLoggedIn', 'true');
-    window.location.href = '/main-dashboard.html';
+    window.location.href = '/clients.html';
   };
 
   const handleSignOut = () => {
@@ -114,7 +114,7 @@ export default function Landing() {
           <div className="flex items-center gap-4">
             {isLoggedIn ? (
               <>
-                <button onClick={() => window.location.href='/main-dashboard.html'} className="text-sm font-medium text-slate-900 dark:text-white hover:opacity-80 transition-opacity cursor-pointer bg-transparent border-0">
+                <button onClick={() => window.location.href='/clients.html'} className="text-sm font-medium text-slate-900 dark:text-white hover:opacity-80 transition-opacity cursor-pointer bg-transparent border-0">
                   Go to Dashboard
                 </button>
                 <button onClick={handleSignOut} className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2.5 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center gap-2 cursor-pointer border-0">

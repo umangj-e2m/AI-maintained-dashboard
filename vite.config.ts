@@ -15,9 +15,7 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
-          mainDashboard: path.resolve(__dirname, 'main-dashboard.html'),
           clients: path.resolve(__dirname, 'clients.html'),
-          dashboard: path.resolve(__dirname, 'dashboard.html'),
         },
       },
     },
