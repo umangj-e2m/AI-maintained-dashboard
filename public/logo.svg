@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Grid dot pattern for textures inside the digits -->
+    <pattern id="dotPattern" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.3" fill="#f05023" />
+    </pattern>
+
+    <!-- Mask to create gaps in the concentric framing rings on left and right -->
+    <mask id="ring-mask">
+      <rect x="0" y="0" width="500" height="500" fill="white" />
+      <rect x="-10" y="160" width="100" height="180" fill="black" />
+      <rect x="410" y="160" width="100" height="180" fill="black" />
+    </mask>
+
+    <!-- Mask that forms the '0' donut shape -->
+    <mask id="zero-shape">
+      <!-- Outer rounded rectangle -->
+      <rect x="260" y="105" width="90" height="120" rx="45" fill="white" />
+      <!-- Inner cutout hole -->
+      <rect x="291" y="141" width="28" height="48" rx="14" fill="black" />
+    </mask>
+  </defs>
+
+  <!-- Concentric Framing Rings with Gaps -->
+  <g mask="url(#ring-mask)">
+    <!-- Outer navy ring -->
+    <circle cx="250" cy="250" r="215" stroke="#0d2c4e" stroke-width="9" fill="none" />
+    <!-- Inner twin green rings -->
+    <circle cx="250" cy="250" r="202" stroke="#39b54a" stroke-width="2.5" fill="none" />
+    <circle cx="250" cy="250" r="195" stroke="#39b54a" stroke-width="2.5" fill="none" />
+  </g>
+
+  <!-- DIGIT '2' -->
+  <!-- Dotted texture inside '2' gap -->
+  <rect x="156" y="145" width="56" height="45" fill="url(#dotPattern)" />
+  
+  <!-- '2' top hollow orange arch -->
+  <path d="M 150,145 A 45,45 0 0,1 240,145 L 217,145 A 22,22 0 0,0 173,145 Z" fill="#f05023" />
+  
+  <!-- '2' modern peach transition curve -->
+  <path d="M 240,145 L 240,158 C 240,175 185,190 150,190 L 150,175 C 185,175 217,165 217,145 Z" fill="#f7945d" />
+  
+  <!-- '2' solid orange base block with 'YEARS' -->
+  <rect x="148" y="190" width="92" height="35" fill="#f05023" />
+  <text x="194" y="212" font-family="'Inter', 'Montserrat', sans-serif" font-weight="900" font-size="11" fill="white" letter-spacing="3" text-anchor="middle">YEARS</text>
+
+  <!-- DIGIT '0' -->
+  <g mask="url(#zero-shape)">
+    <!-- Peach base background -->
+    <rect x="260" y="105" width="90" height="120" fill="#f7945d" />
+    <!-- Top-right orange block -->
+    <rect x="305" y="105" width="45" height="40" fill="#f05023" />
+    <!-- Middle-left orange block -->
+    <rect x="260" y="145" width="45" height="45" fill="#f05023" />
+    <!-- Middle-right dot block -->
+    <rect x="305" y="145" width="45" height="45" fill="url(#dotPattern)" />
+  </g>
+
+  <!-- LOGO TEXT - Lowercase explore & Spaced MEDIA -->
+  <text x="250" y="305" font-family="'Inter', sans-serif" font-weight="800" font-size="64" fill="#39b54a" text-anchor="middle" letter-spacing="-2">explore</text>
+  <text x="250" y="338" font-family="'Inter', sans-serif" font-weight="700" font-size="22" fill="#0d2c4e" text-anchor="middle" letter-spacing="12">MEDIA</text>
+</svg>

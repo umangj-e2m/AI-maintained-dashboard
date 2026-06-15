@@ -1,0 +1,20 @@
+      }));
+      
+      document.querySelector('#tech-detailed-table tbody').innerHTML = detailedTechData.map(r => `
+        <tr><td>${r.device}</td><td>${r.browser}</td><td>${r.os}</td><td>${r.version}</td><td>${r.brand}</td><td>${r.model}</td><td>${r.platform}</td><td>${r.res}</td><td>${fmt(r.users)}</td><td>${fmt(r.sessions)}</td><td>${r.eng.toFixed(2)}%</td><td>${r.bounce.toFixed(2)}%</td><td>${r.dur.toFixed(2)}</td></tr>
+      `).join('');
+
+      // --- GSC ---
+      document.getElementById('gsc-clicks').innerText = fmt(MOCK_DATA.gsc.summary.total_clicks);
+      document.getElementById('gsc-clicks-delta').innerHTML = renderDelta(MOCK_DATA.gsc.summary.clicks_delta, false, "↑ Search Traffic");
+      document.getElementById('gsc-imp').innerText = fmt(MOCK_DATA.gsc.summary.total_impressions);
+      document.getElementById('gsc-imp-delta').innerHTML = renderDelta(MOCK_DATA.gsc.summary.impressions_delta, false, "↑ Visibility");
+      document.getElementById('gsc-ctr').innerText = fmtPct(MOCK_DATA.gsc.summary.avg_ctr);
+      document.getElementById('gsc-ctr-delta').innerHTML = renderDelta(MOCK_DATA.gsc.summary.ctr_delta, false, "Click-Through Rate");
+      document.getElementById('gsc-pos').innerText = MOCK_DATA.gsc.summary.avg_position.toFixed(2);
+      document.getElementById('gsc-pos-delta').innerHTML = renderDelta(MOCK_DATA.gsc.summary.position_delta, true, "Search Ranking");
+
+      const gscDailyLabels = MOCK_DATA.gsc.clicks_over_time.map(d => d.date);
+      if (document.getElementById('gsc-chart1') && document.getElementById('gsc-chart1').offsetWidth > 0) {
+        if (chartInstances['gsc-chart1']) { chartInstances['gsc-chart1'].destroy(); }
+        chartInstances['gsc-chart1'] = new Chart(document.getElementById('gsc-chart1'), {
